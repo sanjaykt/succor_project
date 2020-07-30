@@ -28,6 +28,26 @@ class ProductService {
     }
   }
 
+  Future<ServerResponse> editProduct(Product product) async {
+    String url = Constants.SERVER + PATH + '/edit';
+
+    var productJson = product.toJson();
+    var body = json.encode(productJson);
+
+    try {
+      http.Response response =
+          await http.put(url, body: body, headers: Constants.HEADER);
+
+      var responseJson = json.decode(response.body);
+      ServerResponse serverResponse = ServerResponse.fromJson(responseJson);
+      serverResponse.data = Product.fromJson(serverResponse.data);
+      return serverResponse;
+    } catch (error) {
+      return ServerResponse(
+          status: FAILED, data: null, message: error.toString());
+    }
+  }
+
   Future<ServerResponse> getAllProducts() async {
     String url = Constants.SERVER + PATH + '/getAll';
 

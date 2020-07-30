@@ -6,6 +6,9 @@ import 'package:succor/providers/product_provider.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   static final routeName = 'product_details_screen';
+  final Product productToBeEdited;
+
+  ProductDetailsScreen({this.productToBeEdited});
 
   @override
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
@@ -13,11 +16,22 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
-  Product product = Product();
+  Product productEditOrCreate;
   ProductProvider _productProvider = ProductProvider();
+  TextEditingController _productNameCtrl = TextEditingController();
+  TextEditingController _productDetailsCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    if (productEditOrCreate == null) {
+      productEditOrCreate = Product();
+      if (widget.productToBeEdited != null) {
+        productEditOrCreate = widget.productToBeEdited.clone();
+        _productNameCtrl.text = productEditOrCreate.productName;
+        _productDetailsCtrl.text = productEditOrCreate.productDetails;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Product Details'),
@@ -31,22 +45,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               buildProductNameTextFormField(),
               buildProductDetailsTextFormField(),
               Divider(),
-              RaisedButton(
-                child: Text('Create'),
-                onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    ServerResponse serverResponse =
-                        await _productProvider.createProduct(product);
-                    print(serverResponse.message);
-                    if (serverResponse.status == SUCCESS) {
-                      Navigator.of(context).pop();
-                    }
-                  } else {
-                    print('problem submitting');
-                  }
-                },
-              ),
+              _buildSubmitButton(context),
             ],
           ),
         ),
@@ -57,7 +56,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget buildProductNameTextFormField() {
     return TextFormField(
       keyboardType: TextInputType.text,
-      initialValue: 'product name amma',
+      controller: _productNameCtrl,
       decoration: InputDecoration(
 //                  border: OutlineInputBorder(borderSide: BorderSide.none),
         prefixIcon: Icon(
@@ -70,10 +69,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 //                  fillColor: kPrimaryColor200,
       ),
       onChanged: (value) {
-        product.productName = value;
+        productEditOrCreate.productName = value;
       },
       onSaved: (value) {
-        product.productName = value;
+        productEditOrCreate.productName = value;
       },
     );
   }
@@ -81,7 +80,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget buildProductDetailsTextFormField() {
     return TextFormField(
       keyboardType: TextInputType.text,
-      initialValue: 'product details amma',
+      controller: _productDetailsCtrl,
       maxLines: 5,
       minLines: 3,
       decoration: InputDecoration(
@@ -96,10 +95,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 //                  fillColor: kPrimaryColor200,
       ),
       onChanged: (value) {
-        product.productDetails = value;
+        productEditOrCreate.productDetails = value;
       },
       onSaved: (value) {
-        product.productDetails = value;
+        productEditOrCreate.productDetails = value;
+      },
+    );
+  }
+
+  Widget _buildSubmitButton(BuildContext context) {
+    return RaisedButton(
+      child: Text('Create'),
+      onPressed: () async {
+        if (_formKey.currentState.validate()) {
+          _formKey.currentState.save();
+          ServerResponse serverResponse = ServerResponse();
+          if (widget.productToBeEdited == null) {
+            serverResponse = await _productProvider.createProduct(productEditOrCreate);
+          } else {
+            serverResponse = await _productProvider.editProduct(productEditOrCreate);
+          }
+          print(serverResponse.message);
+          if (serverResponse.status == SUCCESS) {
+            Navigator.of(context).pop();
+          }
+        } else {
+          print('problem submitting');
+        }
       },
     );
   }

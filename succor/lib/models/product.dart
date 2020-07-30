@@ -10,6 +10,8 @@ class Product {
 
   Product();
 
+  clone() => Product.fromJson(toJson());
+
   Product.fromJson(Map<String, dynamic> json)
       : productId = json['productId'],
         productName = json['productName'],

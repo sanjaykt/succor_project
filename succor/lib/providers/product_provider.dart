@@ -13,4 +13,8 @@ class ProductProvider {
   Future<ServerResponse> getAllProducts() {
     return _productService.getAllProducts();
   }
+
+  Future<ServerResponse> editProduct(Product product) {
+    return _productService.editProduct(product);
+  }
 }

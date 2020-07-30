@@ -27,25 +27,48 @@ class _ProductListScreenState extends State<ProductListScreen> {
           Navigator.pushNamed(context, ProductDetailsScreen.routeName);
         },
       ),
-      body: FutureBuilder(
-        future: _productProvider.getAllProducts(),
-        builder: (BuildContext context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              List<Product> data = snapshot.data.data;
-              return ListView.builder(
-                  itemCount: data.length,
-                  itemBuilder: (BuildContext context, index) {
-                    return Card(child: Text(data[index].productName));
-                  }
-              );
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: FutureBuilder(
+          future: _productProvider.getAllProducts(),
+          builder: (BuildContext context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                List<Product> data = snapshot.data.data;
+                return GridView.count(
+                    crossAxisCount: 2,
+                    children: List.generate(data.length, (index) {
+                      return InkWell(
+                        onTap: () {
+                          print(data[index].productName);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      ProductDetailsScreen(
+                                          productToBeEdited: data[index])));
+                        },
+                        child: Card(
+                          color: Colors.red[50],
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(data[index].productName),
+                              SizedBox(height: 10),
+                              Text(data[index].productDetails),
+                            ],
+                          ),
+                        ),
+                      );
+                    }));
+              } else {
+                return Center(child: Text('no data'));
+              }
             } else {
-              return Center(child: Text('no data'));
+              return Center(child: CircularProgressIndicator());
             }
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+          },
+        ),
       ),
     );
   }

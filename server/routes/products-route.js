@@ -74,4 +74,38 @@ router.post('/product/create', (req, res) => {
     })
 })
 
+// edit product
+router.put('/product/edit', (req, res) => {
+    const product = req.body;
+    Product.findByPk(product.productId).then((foundProduct) => {
+        foundProduct.productName = product.productName;
+        foundProduct.productDetails = product.productDetails;
+        foundProduct.createdByUserId = 1;
+        foundProduct.modifiedByUserId = 1;
+        foundProduct.statusId = 1
+        foundProduct.save().then(() => {
+            response.response({
+                res: res,
+                data: foundProduct,
+                status: response.SUCCESS,
+                message: 'successfully edited'
+            })
+        }).catch((error) => {
+            response.response({
+                res: res,
+                data: null,
+                status: response.FAILED,
+                message: error.toString()
+            })
+        });
+    }).catch((error) => {
+        response.response({
+            res: res,
+            data: null,
+            status: response.FAILED,
+            message: error.toString()
+        })
+    })
+})
+
 module.exports = router;
