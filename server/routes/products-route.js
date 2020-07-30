@@ -28,6 +28,25 @@ router.get('/products', (req, res) => {
 //     })
 // })
 
+// get products
+router.get('/product/getAll', (req, res) => {
+    Product.findAll().then((products) => {
+        response.response({
+            res: res,
+            data: products,
+            status: response.SUCCESS,
+            message: 'successfully retrieved'
+        })
+    }).catch((error) => {
+        response.response({
+            res: res,
+            data: null,
+            status: response.FAILED,
+            message: error.toString()
+        })
+    })
+})
+
 //create product
 router.post('/product/create', (req, res) => {
     const product = req.body;

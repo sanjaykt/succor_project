@@ -9,4 +9,8 @@ class ProductProvider {
   Future<ServerResponse> createProduct(Product product) {
     return _productService.createProduct(product);
   }
+
+  Future<ServerResponse> getAllProducts() {
+    return _productService.getAllProducts();
+  }
 }
