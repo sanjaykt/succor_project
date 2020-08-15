@@ -136,6 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
           _formKey.currentState.save();
           ServerResponse serverResponse = await _authProvider.login(username, password);
           if (serverResponse.status == SUCCESS) {
+//            goToProductScreen();
             Navigator.popAndPushNamed(context, ProductListScreen.routeName);
           } else {
             print(serverResponse.message);
@@ -144,6 +145,10 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+//
+//  goToProductScreen() {
+//    Future.delayed(Duration(milliseconds: 500), () => Navigator.popAndPushNamed(context, ProductListScreen.routeName));
+//  }
 
   Widget _buildRegisterButton() {
     return SizedBox(

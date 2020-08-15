@@ -23,22 +23,7 @@ class ProductProvider extends ChangeNotifier {
     _authProvider.addLoginHandler('ProductProvider', loginHandler);
   }
 
-  loginHandler() async {
-//    await updateFromServer();
-  }
-
-//  updateFromServer() async {
-//    ServerResponse serverResponse = await _productService.getAllProducts();
-//    if (serverResponse.status == SUCCESS) {
-//      processFetchedEntities(serverResponse.data);
-//    }
-//    List<Product> products = serverResponse.data;
-//    if (products != null && products.isNotEmpty) {
-//      for (var product in products) {
-//        await addToDB(product);
-//      }
-//    }
-//  }
+  loginHandler() async {}
 
   Future<ServerResponse> getAllProducts() async {
     ServerResponse serverResponse;
@@ -59,6 +44,7 @@ class ProductProvider extends ChangeNotifier {
     // if empty get it from the server
     if (_productList == null || _productList.isEmpty) {
       serverResponse = await _productService.getAllProducts();
+      print('service is called...');
       processFetchedEntities(serverResponse.data);
     }
 
@@ -110,7 +96,6 @@ class ProductProvider extends ChangeNotifier {
         break;
       }
     }
-//    _productList.add(product);
   }
 
   addToDB(Product product) async {
@@ -120,16 +105,21 @@ class ProductProvider extends ChangeNotifier {
 
   Future<ServerResponse> createProduct(Product product) async {
     ServerResponse serverResponse = await _productService.createProduct(product);
-    _productList.add(serverResponse.data);
-    addToCache(serverResponse.data);
-    notifyListeners();
+    if (serverResponse.status == SUCCESS) {
+      addToCache(serverResponse.data);
+      addToDB(serverResponse.data);
+      notifyListeners();
+    }
     return serverResponse;
   }
 
   Future<ServerResponse> editProduct(Product product) async {
     ServerResponse serverResponse = await _productService.editProduct(product);
-    updateCache(serverResponse.data);
-    notifyListeners();
+    if (serverResponse.status == SUCCESS) {
+      updateCache(serverResponse.data);
+      addToDB(serverResponse.data);
+      notifyListeners();
+    }
     return serverResponse;
   }
 

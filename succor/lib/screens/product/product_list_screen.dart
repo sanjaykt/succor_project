@@ -9,7 +9,7 @@ import 'package:succor/providers/product_provider.dart';
 import 'package:succor/screens/product/product_details.dart';
 
 class ProductListScreen extends StatefulWidget {
-  static final routeName = 'home_screen';
+  static final routeName = 'product_list_screen';
 
   @override
   _ProductListScreenState createState() => _ProductListScreenState();
