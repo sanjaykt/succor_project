@@ -8,7 +8,6 @@ class ServerResponse {
 
   ServerResponse({this.status, this.data, this.message});
 
-
   ServerResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     data = json['data'];

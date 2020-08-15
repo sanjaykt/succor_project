@@ -171,10 +171,10 @@ class _UserDetailsState extends State<UserDetails> {
             return;
           }
           _formKey.currentState.save();
-         String response = await _userProvider.createUser(_user);
-         if (response == 'success') {
-           Navigator.popAndPushNamed(context, LoginScreen.routeName);
-         }
+          String response = await _userProvider.createUser(_user);
+          if (response == 'success') {
+            Navigator.popAndPushNamed(context, LoginScreen.routeName);
+          }
         },
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:succor/common/constants.dart';
 import 'package:succor/models/product.dart';
 import 'package:succor/models/server_response.dart';
@@ -7,7 +8,8 @@ import 'package:succor/providers/product_provider.dart';
 class ProductDetailsScreen extends StatefulWidget {
   static final routeName = 'product_details_screen';
   final Product productToBeEdited;
-
+//  final ProductProvider productProvider;
+//
   ProductDetailsScreen({this.productToBeEdited});
 
   @override
@@ -17,12 +19,14 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final _formKey = GlobalKey<FormState>();
   Product productEditOrCreate;
-  ProductProvider _productProvider = ProductProvider();
+  ProductProvider _productProvider;
   TextEditingController _productNameCtrl = TextEditingController();
   TextEditingController _productDetailsCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    _productProvider = Provider.of<ProductProvider>(context);
+
     if (productEditOrCreate == null) {
       productEditOrCreate = Product();
       if (widget.productToBeEdited != null) {
@@ -105,7 +109,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Widget _buildSubmitButton(BuildContext context) {
     return RaisedButton(
-      child: Text('Create'),
+      child: widget.productToBeEdited == null ? Text('Create') : Text('Update'),
       onPressed: () async {
         if (_formKey.currentState.validate()) {
           _formKey.currentState.save();

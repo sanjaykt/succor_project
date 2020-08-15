@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:succor/Screens/User/user_details.dart';
 import 'package:succor/common/constants.dart';
 import 'package:succor/models/server_response.dart';
-import 'package:succor/providers/user_provider.dart';
+import 'package:succor/providers/auth_provider.dart';
 import 'package:succor/screens/product/product_list_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,13 +16,15 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ThemeData theme;
-  UserProvider _userProvider = UserProvider();
+  AuthProvider _authProvider;
   String username;
   String password;
 
   @override
   Widget build(BuildContext context) {
+    _authProvider = Provider.of<AuthProvider>(context);
     theme = Theme.of(context);
+
     return Scaffold(
       backgroundColor: theme.backgroundColor,
       body: Container(
@@ -131,8 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
             return;
           }
           _formKey.currentState.save();
-          ServerResponse serverResponse =
-              await _userProvider.login(username, password);
+          ServerResponse serverResponse = await _authProvider.login(username, password);
           if (serverResponse.status == SUCCESS) {
             Navigator.popAndPushNamed(context, ProductListScreen.routeName);
           } else {

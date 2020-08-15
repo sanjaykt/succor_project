@@ -15,16 +15,14 @@ class ProductService {
     var body = json.encode(productJson);
 
     try {
-      http.Response response =
-          await http.post(url, body: body, headers: Constants.HEADER);
+      http.Response response = await http.post(url, body: body, headers: Constants.HEADER);
 
       var responseJson = json.decode(response.body);
       ServerResponse serverResponse = ServerResponse.fromJson(responseJson);
       serverResponse.data = Product.fromJson(serverResponse.data);
       return serverResponse;
     } catch (error) {
-      return ServerResponse(
-          status: FAILED, data: null, message: error.toString());
+      return ServerResponse(status: FAILED, data: null, message: error.toString());
     }
   }
 
@@ -35,16 +33,14 @@ class ProductService {
     var body = json.encode(productJson);
 
     try {
-      http.Response response =
-          await http.put(url, body: body, headers: Constants.HEADER);
+      http.Response response = await http.put(url, body: body, headers: Constants.HEADER);
 
       var responseJson = json.decode(response.body);
       ServerResponse serverResponse = ServerResponse.fromJson(responseJson);
       serverResponse.data = Product.fromJson(serverResponse.data);
       return serverResponse;
     } catch (error) {
-      return ServerResponse(
-          status: FAILED, data: null, message: error.toString());
+      return ServerResponse(status: FAILED, data: null, message: error.toString());
     }
   }
 

@@ -16,26 +16,18 @@ class User {
         password = json['password'],
         createdByUserId = json['createdByUserId'],
         modifiedByUserId = json['modifiedByUserId'],
-        createdDate = (json['createdDate'] != null
-            ? DateTime.parse(json['createdDate'])
-            : null),
-        modifiedDate = (json['modifiedDate'] != null
-            ? DateTime.parse(json['modifiedDate'])
-            : null),
+        createdDate = (json['createdDate'] != null ? DateTime.parse(json['createdDate']) : null),
+        modifiedDate = (json['modifiedDate'] != null ? DateTime.parse(json['modifiedDate']) : null),
         statusId = json['statusId'];
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'userId': userId,
         'username': username,
         'password': password,
-        if (createdDate != null)
-          'createdDate': createdDate.toString(),
-        if (modifiedDate != null)
-          'modifiedDate': modifiedDate.toString(),
+        if (createdDate != null) 'createdDate': createdDate.toString(),
+        if (modifiedDate != null) 'modifiedDate': modifiedDate.toString(),
         'createdByUserId': createdByUserId,
         'modifiedByUserId': modifiedByUserId,
-        if (statusId != null)
-          'statusId': statusId,
+        if (statusId != null) 'statusId': statusId,
       };
 }

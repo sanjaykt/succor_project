@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 var kPrimaryColor200 = Colors.blueGrey[200];
 var kPrimaryColor = Colors.blueGrey[700];
 var kPrimaryLight = Color(0xFF718792);
@@ -25,6 +24,8 @@ class Constants {
   Constants();
 
 //  static const String SERVER = 'http://172.20.10.2:3030';
+//  static const String SERVER = 'http://10.110.44.136:3030';
+
   static const String SERVER = 'http://192.168.43.122:3030';
   static const Map<String, String> HEADER = {"Content-Type": "application/json"};
 }
